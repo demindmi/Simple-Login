@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useReducer,
-  useEffect,
-  useContext,
-  useRef,
-} from "react";
+import React, { useState, useReducer, useEffect, useContext } from "react";
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
 import Button from "../UI/Button/Button";
@@ -49,9 +43,6 @@ const Login = (props) => {
   const { isValid: emailIsValid } = emailState;
   const { isValid: passwordIsValid } = passwordState;
 
-  const emailRef = useRef();
-  const passwordRef = useRef();
-
   useEffect(() => {
     // since we don't want to check on each key stroke we can give user some time
     const identifierTimer = setTimeout(() => {
@@ -84,14 +75,7 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    if (formIsValid) {
-      authCTX.onLogin(emailState.value, passwordState.value);
-    } else if (!emailIsValid) {
-      emailRef.current.activate();
-      //When you reference an element with the useRef hook it creates an object. Inside there is a property called current that contains the whole html element
-    } else {
-      passwordRef.current.activate();
-    }
+    authCTX.onLogin(emailState.value, passwordState.value);
   };
 
   return (
@@ -100,7 +84,6 @@ const Login = (props) => {
         <Input
           type="email"
           label="E-mail"
-          ref={emailRef}
           value={emailState.value}
           isValid={emailIsValid}
           onChange={emailChangeHandler}
@@ -109,14 +92,13 @@ const Login = (props) => {
         <Input
           type="password"
           label="Password"
-          ref={passwordRef}
           value={passwordState.value}
           isValid={passwordIsValid}
           onChange={passwordChangeHandler}
           onBlur={validatePasswordHandler}
         ></Input>
         <div className={classes.actions}>
-          <Button type="submit" className={classes.btn}>
+          <Button type="submit" className={classes.btn} disabled={!formIsValid}>
             Login
           </Button>
         </div>
